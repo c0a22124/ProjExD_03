@@ -159,6 +159,23 @@ class Explosion:
         else:
             self.count=0
 
+class Score:
+    def __init__(self):
+        self.font = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.fontcolor = (0,0,255)
+        self.score = 0
+        self.img = self.font.render("スコア:", 0, self.fontcolor)
+        self.xy = (100,850)
+        self.xy2 = (210,850)
+    
+    def update(self,screen):
+        self.img2 = self.font.render(f"{self.score}", 0, self.fontcolor)
+        screen.blit(self.img, self.xy)
+        screen.blit(self.img2, self.xy2)
+    
+    def up(self):
+        self.score +=1
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -168,6 +185,7 @@ def main():
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     exps = []
     beam = None
+    sc=Score()
 
     clock = pg.time.Clock()
     tmr = 0
@@ -191,6 +209,7 @@ def main():
         for i, bomb in enumerate(bombs):
             if beam is not None:
                 if bomb.rct.colliderect(beam.rct):
+                    sc.up()
                     exps.append(Explosion(bombs[i]))
                     bombs[i] = None
                     beam = None
@@ -208,6 +227,7 @@ def main():
             for exp in exps:
                 if exp.life >0:
                     exp.update(screen)
+        sc.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
