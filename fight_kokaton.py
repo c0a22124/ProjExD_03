@@ -146,32 +146,32 @@ class Explosion:
         self.img2 =pg.transform.flip(pg.image.load(f"ex03/fig/explosion.gif"), True, True)
         self.img3 =pg.transform.flip(pg.image.load(f"ex03/fig/explosion.gif"), False, False)
         self.img4 =pg.transform.flip(pg.image.load(f"ex03/fig/explosion.gif"), False, True)
-        self.lst = [self.img,self.img2,self.img3,self.img4]
+        self.lst = [self.img,self.img2,self.img3,self.img4]#画像のリストを生成
         self.expxy = bomb.rct.center
         self.life  =100
-        self.count = 0
+        self.count = 0#画像のインデックス
 
     def update(self,screen):
         self.life -=1
         screen.blit(self.lst[self.count], self.expxy)
-        if self.count !=3:
+        if self.count !=3:#カウントを回して爆発する画像を変更
             self.count +=1
         else:
             self.count=0
 
 class Score:
     def __init__(self):
-        self.font = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
-        self.fontcolor = (0,0,255)
-        self.score = 0
-        self.img = self.font.render("スコア:", 0, self.fontcolor)
-        self.xy = (100,850)
+        self.font = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)#フォントの設定
+        self.fontcolor = (0,0,255)#色
+        self.score = 0#スコア
+        self.img = self.font.render("スコア:", 0, self.fontcolor)#文字列
+        self.xy = (100,850)#座標
         self.xy2 = (210,850)
     
     def update(self,screen):
-        self.img2 = self.font.render(f"{self.score}", 0, self.fontcolor)
-        screen.blit(self.img, self.xy)
-        screen.blit(self.img2, self.xy2)
+        self.img2 = self.font.render(f"{self.score}", 0, self.fontcolor)#スコア数
+        screen.blit(self.img, self.xy)#表示
+        screen.blit(self.img2, self.xy2)#表示
     
     def up(self):
         self.score +=1
@@ -226,7 +226,7 @@ def main():
         if exps is not None:
             for exp in exps:
                 if exp.life >0:
-                    exp.update(screen)
+                    exp.update(screen)#lifeがゼロになるまで爆発させる
         sc.update(screen)
         pg.display.update()
         tmr += 1
