@@ -139,6 +139,25 @@ class Beam:
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
 
+class Explosion:
+    
+    def __init__(self,bomb):
+        self.img = pg.transform.flip(pg.image.load(f"ex03/fig/explosion.gif"), True, False) 
+        self.img2 =pg.transform.flip(pg.image.load(f"ex03/fig/explosion.gif"), True, True)
+        self.img3 =pg.transform.flip(pg.image.load(f"ex03/fig/explosion.gif"), False, False)
+        self.img4 =pg.transform.flip(pg.image.load(f"ex03/fig/explosion.gif"), False, True)
+        self.lst = [self.img,self.img2,self.img3,self.img4]
+        self.expxy = bomb.rct.center
+        self.life  =100
+        self.count = 0
+
+    def update(self,screen):
+        self.life -=1
+        screen.blit(self.lst[self.count], self.expxy)
+        if self.count !=3:
+            self.count +=1
+        else:
+            self.count=0
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
@@ -147,6 +166,7 @@ def main():
     bird = Bird(3, (900, 400))
     # bomb = Bomb((255, 0, 0), 10)
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
+    exps = []
     beam = None
 
     clock = pg.time.Clock()
@@ -171,6 +191,7 @@ def main():
         for i, bomb in enumerate(bombs):
             if beam is not None:
                 if bomb.rct.colliderect(beam.rct):
+                    exps.append(Explosion(bombs[i]))
                     bombs[i] = None
                     beam = None
                     bird.change_img(6, screen)
@@ -183,6 +204,10 @@ def main():
             bomb.update(screen)
         if beam is not None:
             beam.update(screen)
+        if exps is not None:
+            for exp in exps:
+                if exp.life >0:
+                    exp.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
